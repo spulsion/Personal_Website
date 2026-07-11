@@ -46,13 +46,25 @@
       <section class="projects-grid" id="projects">
         <!-- Project cards — replace src, title, description, and href with your real projects -->
         <article class="project-card">
-          <a href="#" class="card-link">
-            <div class="card-thumb placeholder-thumb">
-              <span class="thumb-label">Project 1</span>
+          <a
+            href="https://bargain-baskets.vercel.app/"
+            class="card-link"
+            target="_blank"
+            rel="noopener">
+            <div class="card-thumb">
+              <img
+                src="projects/bargain-baskets.png"
+                alt="Bargain Baskets home page" />
             </div>
             <div class="card-info">
-              <h2 class="card-title">Project Title</h2>
-              <p class="card-tags">Python &middot; Django &middot; REST API</p>
+              <h2 class="card-title">Bargain Baskets</h2>
+              <p class="card-desc">
+                Crowd-sourced grocery price tracker — scan a product barcode and
+                instantly see which nearby store has the cheapest basket.
+              </p>
+              <p class="card-tags">
+                Next.js &middot; TypeScript &middot; Prisma &middot; Postgres
+              </p>
             </div>
           </a>
         </article>
@@ -80,18 +92,16 @@
             </div>
           </a>
         </article>
+      </section>
 
-        <article class="project-card">
-          <a href="#" class="card-link">
-            <div class="card-thumb placeholder-thumb">
-              <span class="thumb-label">Project 4</span>
-            </div>
-            <div class="card-info">
-              <h2 class="card-title">Project Title</h2>
-              <p class="card-tags">React &middot; TypeScript</p>
-            </div>
-          </a>
-        </article>
+      <!-- ── 3D Models Carousel ────────────────────────────── -->
+      <!-- Hidden until screenshots exist. Add files to projects/3d-models/
+           and list their filenames in the MODELS array in js/main.js. -->
+      <section class="models-section" id="modelsSection">
+        <h2 class="models-heading">3D Models</h2>
+        <div class="carousel" id="modelCarousel">
+          <div class="carousel-track" id="carouselTrack"></div>
+        </div>
       </section>
 
       <!-- ── Currently Interested In ───────────────────────── -->

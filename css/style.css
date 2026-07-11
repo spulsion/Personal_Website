@@ -1,3 +1,26 @@
+/* ── Fonts (self-hosted Inter) ────────────────────────────── */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/inter-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("../fonts/inter-600.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../fonts/inter-700.woff2") format("woff2");
+}
+
 /* ── Reset & Base ─────────────────────────────────────────── */
 *,
 *::before,
@@ -8,13 +31,13 @@
 }
 
 :root {
-  --bg: #f9f9f7;
-  --surface: #ffffff;
-  --text: #111111;
-  --text-muted: #666666;
-  --accent: #111111;
-  --border: #e4e4e0;
-  --card-hover: #f0f0ec;
+  --bg: #17181a;
+  --surface: #1f2123;
+  --text: #e9eaec;
+  --text-muted: #9497a0;
+  --accent: #f2f3f5;
+  --border: #2b2d31;
+  --card-hover: #26282b;
   --font: "Inter", system-ui, -apple-system, sans-serif;
   --header-h: 64px;
 }
@@ -155,7 +178,7 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #e8e8e4;
+  background: var(--surface);
 }
 
 .thumb-label {
@@ -174,6 +197,13 @@ img {
   font-weight: 600;
   letter-spacing: -0.01em;
   margin-bottom: 0.25rem;
+}
+
+.card-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
 }
 
 .card-tags {
@@ -251,7 +281,7 @@ img {
 .about-photo {
   width: 100%;
   aspect-ratio: 3 / 4;
-  background: #e8e8e4;
+  background: var(--surface);
   border-radius: 2px;
   overflow: hidden;
 }
@@ -287,7 +317,7 @@ img {
 .about-bio p {
   font-size: 0.975rem;
   line-height: 1.75;
-  color: #333;
+  color: var(--text);
   margin-bottom: 1rem;
 }
 
@@ -427,6 +457,79 @@ img {
 
 .btn:hover {
   opacity: 0.8;
+}
+
+/* ── 3D Models Carousel ───────────────────────────────────── */
+.models-section {
+  display: none; /* revealed by JS only when screenshots are present */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 2rem 4rem;
+  width: 100%;
+}
+
+.models-heading {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.carousel {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding: 2.5rem 0; /* headroom so the scaled-up active slide isn't clipped */
+}
+
+.carousel-track {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.carousel-slide {
+  flex: 0 0 auto;
+  width: 320px;
+}
+
+.slide-inner {
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--surface);
+  transform: scale(0.72);
+  opacity: 0.4;
+  transition:
+    transform 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.7s ease,
+    box-shadow 0.7s ease;
+}
+
+.carousel-slide img {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  display: block;
+}
+
+/* The focused slide expands and lifts so it clearly reads as the active one */
+.carousel-slide.is-active .slide-inner {
+  transform: scale(1.12);
+  opacity: 1;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55);
+}
+
+@media (max-width: 480px) {
+  .carousel-slide {
+    width: 220px;
+  }
+  .carousel-slide img {
+    height: 220px;
+  }
 }
 
 /* ── Footer ───────────────────────────────────────────────── */
