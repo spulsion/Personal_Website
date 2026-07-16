@@ -28,7 +28,7 @@ if (form) {
 const MODELS = [
   "Herman_miller_embody_arm.png",
   "ikea_pegboard_dewalt.png",
-  // "gear-assembly.png",
+  "microphone_screw_replacement.png",
   // "phone-stand.png",
 ];
 
