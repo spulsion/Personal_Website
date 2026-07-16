@@ -38,13 +38,15 @@ const carousel = document.getElementById("modelCarousel");
 if (carousel) {
   const section = document.getElementById("modelsSection");
   const track = document.getElementById("carouselTrack");
+  const prevBtn = document.getElementById("carouselPrev");
+  const nextBtn = document.getElementById("carouselNext");
 
   if (MODELS.length === 0) {
     // Nothing to show yet — leave the whole section hidden.
     if (section) section.style.display = "none";
   } else {
     // Build a slide per screenshot.
-    MODELS.forEach((file, i) => {
+    const slides = MODELS.map((file, i) => {
       const slide = document.createElement("div");
       slide.className = "carousel-slide";
       const inner = document.createElement("div");
@@ -55,50 +57,120 @@ if (carousel) {
       img.loading = "lazy";
       inner.appendChild(img);
       slide.appendChild(inner);
+      slide._r = 0; // last relative position, used to detect wrap-arounds
       track.appendChild(slide);
+      return slide;
     });
 
-    const slides = Array.from(track.children);
+    const n = slides.length;
     let index = 0;
     let timer = null;
+    let spacing = computeSpacing();
 
-    // Slide the track so the active slide sits dead center, and flag it active.
-    function center() {
-      slides.forEach((s) => s.classList.remove("is-active"));
-      const active = slides[index];
-      active.classList.add("is-active");
-      const offset =
-        carousel.clientWidth / 2 - (active.offsetLeft + active.offsetWidth / 2);
-      track.style.transform = "translateX(" + offset + "px)";
+    // Distance between adjacent slide centers; tightened on narrow screens.
+    function computeSpacing() {
+      return Math.min(300, Math.round(window.innerWidth * 0.72));
+    }
+
+    // Shortest signed offset of slide i from the active one, so the strip
+    // wraps: e.g. with 3 slides, the first sits just right of the last.
+    function wrapR(r) {
+      r = ((r % n) + n) % n; // 0..n-1
+      if (r > n / 2) r -= n; // move the far half to the negative (left) side
+      return r;
+    }
+
+    // Place every slide relative to the active index.
+    function layout(animate) {
+      slides.forEach((slide, i) => {
+        const r = wrapR(i - index);
+        const absr = Math.abs(r);
+
+        // Target visual state for this position.
+        const scale = absr < 0.5 ? 1.12 : absr < 1.5 ? 0.72 : 0.5;
+        const opacity = absr < 0.5 ? 1 : absr < 1.5 ? 0.55 : 0;
+        const z = absr < 0.5 ? 30 : absr < 1.5 ? 20 : 10;
+        const transform =
+          "translate(-50%, -50%) translateX(" +
+          r * spacing +
+          "px) scale(" +
+          scale +
+          ")";
+
+        // Did this slide cross the seam (jump to the opposite side)?
+        const wrap = Math.abs(r - slide._r) > 1.5;
+        slide._r = r;
+        slide.style.zIndex = z;
+        slide.classList.toggle("is-active", absr < 0.5);
+
+        if (animate && wrap) {
+          // Teleport into position while invisible, then fade in on the new
+          // side — avoids a "pop" sliding across the whole carousel.
+          slide.style.transition = "none";
+          slide.style.transform = transform;
+          slide.style.opacity = 0;
+          void slide.offsetWidth; // flush the instant move
+          requestAnimationFrame(() => {
+            slide.style.transition = "";
+            slide.style.opacity = opacity;
+          });
+        } else if (!animate) {
+          // Initial placement — snap, no animation.
+          slide.style.transition = "none";
+          slide.style.transform = transform;
+          slide.style.opacity = opacity;
+          void slide.offsetWidth;
+        } else {
+          // Normal neighbour move — slide smoothly.
+          slide.style.transition = "";
+          slide.style.transform = transform;
+          slide.style.opacity = opacity;
+        }
+      });
+    }
+
+    function go(newIndex) {
+      index = ((newIndex % n) + n) % n;
+      layout(true);
     }
 
     function next() {
-      index = (index + 1) % slides.length;
-      center();
+      go(index + 1);
+    }
+    function prev() {
+      go(index - 1);
     }
 
     function start() {
       stop();
-      if (slides.length > 1) {
-        timer = setInterval(next, SECONDS_PER_SLIDE * 1000);
-      }
+      if (n > 1) timer = setInterval(next, SECONDS_PER_SLIDE * 1000);
     }
-
     function stop() {
       if (timer) clearInterval(timer);
       timer = null;
     }
 
     section.style.display = "block";
-    // Position without animating on first paint.
-    const prevTransition = track.style.transition;
-    track.style.transition = "none";
-    center();
-    // Force reflow, then restore the animated transitions.
-    void track.offsetWidth;
-    track.style.transition = prevTransition;
+    layout(false); // initial placement, no animation
 
-    window.addEventListener("resize", center);
+    // Arrows: step one image and restart the dwell timer so the manual pick
+    // gets its full viewing time.
+    if (prevBtn)
+      prevBtn.addEventListener("click", () => {
+        prev();
+        start();
+      });
+    if (nextBtn)
+      nextBtn.addEventListener("click", () => {
+        next();
+        start();
+      });
+
+    window.addEventListener("resize", () => {
+      spacing = computeSpacing();
+      layout(false);
+    });
+
     // Let visitors linger on an image without it advancing out from under them.
     carousel.addEventListener("mouseenter", stop);
     carousel.addEventListener("mouseleave", start);

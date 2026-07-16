@@ -18,7 +18,7 @@ Maintain the table below as the single source of truth for what the site uses an
 | --- | --- | --- |
 | HTML5 | — | Page structure for `index.html`, `about.html`, `contact.html` |
 | CSS3 (`css/style.css`) | — | All styling; theme driven by CSS custom properties in `:root` (dark grey scheme) |
-| Vanilla JavaScript (`js/main.js`) | — | Footer year injection; contact-form submit handling (currently simulated); the 3D-models carousel (auto-advance, focus-scaling, driven by the `MODELS` filename array) |
+| Vanilla JavaScript (`js/main.js`) | — | Footer year injection; contact-form submit handling (currently simulated); the 3D-models carousel — circular coverflow with auto-advance, focus-scaling, prev/next arrows, hover-pause, driven by the `MODELS` filename array |
 | Inline SVG | — | GitHub / LinkedIn icons in the header (no icon library) |
 | Raster images (`images/`) | — | Photographs / bitmap assets. Currently `images/mark.png`, the About-page portrait (rendered into the 3:4 `.about-photo` frame via `object-fit: cover`) |
 | Project screenshots (`projects/`) | — | Home-page project-card thumbnails. User drops a screenshot here per project; each card's `<img>` points at it and the whole card links out to that project's live site. First entry: `projects/bargain-baskets.png` |
