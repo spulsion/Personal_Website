@@ -48,7 +48,7 @@ Then visit `http://localhost:8000`. There are no build, lint, or test commands �
 
 Three pages — `index.html` (projects), `about.html`, `contact.html` — each a standalone document. They all share `css/style.css` and `js/main.js`.
 
-**The header (`.site-header`: logo, nav links, GitHub/LinkedIn SVG icons) and footer are copy-pasted into all three HTML files.** There is no templating or includes. When you change nav links, social URLs, or the header/footer, you must edit **every** HTML file to keep them in sync. The only per-page difference in the nav is which link carries the `active` class.
+**The header (`.site-header`: logo + nav links) and the footer (`.site-footer`: Email / GitHub / LinkedIn links + copyright) are copy-pasted into all three HTML files.** There is no templating or includes. When you change nav links, the footer's contact/social URLs, or anything in the header/footer, you must edit **every** HTML file to keep them in sync. The only per-page difference in the nav is which link carries the `active` class. The "Currently Interested In" section lives at the bottom of `about.html` only.
 
 - `css/style.css` — the entire design system. Colors, fonts, and spacing come from CSS custom properties in `:root` (`--bg`, `--text`, `--accent`, `--border`, etc.). Change theme values there rather than hardcoding. Section-by-section comment banners divide the file (Header, Hero, Projects Grid, Interests, About, Contact, Button, Footer, Responsive).
 - `js/main.js` — loaded by all pages. Sets the footer year, and wires the contact form. It only touches form logic when `#contactForm` exists, so it's safe on pages without the form.
